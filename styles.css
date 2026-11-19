@@ -1515,3 +1515,18 @@ nav {
     transform: scale(1.045);
 }
 
+.ribbon span {
+    display: inline-block;
+    width: max-content;
+    animation: marquee 20s linear infinite !important;
+}
+
+@keyframes marquee {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+}
