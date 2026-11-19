@@ -591,7 +591,7 @@ footer p {
     content: '';
     position: absolute;
     inset: 0;
-    background: url('envases.png') center 58% / 100% auto no-repeat;
+    background: url('img/envases.png') center 58% / 100% auto no-repeat;
 }
 
 .packages {
@@ -878,7 +878,7 @@ nav {
 }
 
 .hero-photo {
-    background-image: url('envases.png');
+    background-image: url('img/envases.png');
     background-repeat: no-repeat;
     position: absolute;
     right: 0;
