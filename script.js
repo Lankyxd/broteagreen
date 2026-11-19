@@ -32,7 +32,7 @@ const items = [
     ["zanahoria", "Zanahoria", "Aroma fresco y suaves notas de zanahoria.", "#bd6a32"]
 ];
 const rail = document.querySelector('#carousel');
-rail.innerHTML = items.map(([key, name, desc, color]) => `<article class="product" style="--card-color:${color}"><div class="pic"><img src="microgreens-webp/${key}.webp" alt="Microgreens de ${name}" draggable="false"></div><div class="info"><h3>${name}</h3><p>${desc}</p></div></article>`).join('');
+rail.innerHTML = items.map(([key, name, desc, color]) => `<article class="product" style="--card-color:${color}"><div class="pic"><img src="microgreens/${key}.png" alt="Microgreens de ${name}" draggable="false"></div><div class="info"><h3>${name}</h3><p>${desc}</p></div></article>`).join('');
 for (const [id, dir] of [['prev', -1], ['next', 1]])document.getElementById(id).onclick = () => rail.scrollBy({
     left: dir*(rail.firstElementChild.offsetWidth+18), behavior: 'smooth'
 });
