@@ -631,7 +631,7 @@ footer p {
     aspect-ratio: 1.30;
     overflow: hidden;
     background-color: #e9e9d4;
-    background-image: url('envases.png');
+    background-image: url('img/envases.png');
     background-repeat: no-repeat;
     border-radius: 12px;
 }
@@ -1374,7 +1374,7 @@ nav {
     content: '';
     position: absolute;
     inset: 0;
-    background-image: linear-gradient(90deg,#14271cad,#14271c90),url('tostadas.webp');
+    background-image: linear-gradient(90deg,#14271cad,#14271c90),url('img/tostadas.png');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
