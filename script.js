@@ -94,3 +94,288 @@ packageLink.addEventListener('click', () => {
     }
     ];
     art.innerHTML = '';
+    const photo = document.createElement('div');
+    photo.className = 'hero-photo';
+    art.appendChild(photo);
+    const controls = document.createElement('div');
+    controls.className = 'hero-dots';
+    controls.setAttribute('aria-label', 'Diapositivas de portada');
+    let index = 0, timer = null, paused = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function show(i) {
+        index = i;
+        const s = slides[i];
+        photo.dataset.slide = i;
+        photo.style.animation = 'none';
+        void photo.offsetWidth;
+        photo.style.animation = '';
+        headline.innerHTML = s.title;
+        desc.textContent = s.desc;
+        cta.textContent = s.cta;
+        cta.href = s.href;
+        art.setAttribute('aria-label', s.alt);
+        dots.forEach((d, j) => d.setAttribute('aria-current', j === i ? 'true': 'false'));
+    }
+    const dots = slides.map((s, i) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.setAttribute('aria-label', `Mostrar diapositiva ${i+1}`);
+        btn.addEventListener('click', () => {
+            show(i);
+            restart()
+        });
+        controls.appendChild(btn);
+        return btn;
+    });
+    const toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'hero-toggle';
+    controls.appendChild(toggle);
+    hero.appendChild(controls);
+    function restart() {
+        clearInterval(timer);
+        if (!paused)timer = setInterval(() => show((index+1)%slides.length), 7000);
+        toggle.textContent = paused ? 'Reproducir': 'Pausar';
+        toggle.setAttribute('aria-label', paused ? 'Reproducir carrusel': 'Pausar carrusel');
+    }
+    toggle.onclick = () => {
+        paused = !paused;
+        restart()
+    };
+    show(0);
+    restart();
+    const header = document.querySelector('header');
+    function updateHeader() {
+        header.classList.toggle('scrolled', window.scrollY > 45)
+    }
+    window.addEventListener('scroll', updateHeader, {
+        passive: true
+    });
+    updateHeader();
+})();
+;
+(() => {
+    const carousel = document.querySelector('#carousel');
+    const cards = [...carousel.querySelectorAll('.product')];
+    if (!cards.length)return;
+    const section = carousel.closest('.products');
+    const palette = ['#57964e', '#9d547a', '#449d79', '#299998', '#72924a'];
+    const labels = cards.map(card => ({
+        name: card.querySelector('h3').textContent, description: card.querySelector('.info p').textContent
+    }));
+    carousel.classList.remove('carousel');
+    carousel.classList.add('coverflow');
+    carousel.tabIndex = 0;
+    carousel.setAttribute('role', 'region');
+    carousel.setAttribute('aria-label', 'Carrusel 3D de variedades de microgreens');
+    const bottom = document.createElement('div');
+    bottom.className = 'coverflow-bottom';
+    bottom.innerHTML = '<p class="coverflow-description" aria-live="polite"></p><div class="coverflow-indicators" aria-label="Seleccionar variedad"></div>';
+    carousel.after(bottom);
+    const description = bottom.querySelector('p'), indicators = bottom.querySelector('.coverflow-indicators');
+    let current = 1, position = 1, animationFrame = 0, timer = null, paused = matchMedia('(prefers-reduced-motion: reduce)').matches, inView = false, interacting = false;
+    const dots = labels.map((label, i) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.setAttribute('aria-label', `Mostrar ${label.name}`);
+        button.onclick = () => {
+            setCurrent(i);
+            restart()
+        };
+        indicators.appendChild(button);
+        return button
+    });
+    const toggle = document.createElement('button');
+    toggle.className = 'autoplay-toggle';
+    toggle.type = 'button';
+    indicators.appendChild(toggle);
+    toggle.onclick = () => {
+        paused = !paused;
+        restart()
+    };
+    cards.forEach((card, i) => {
+        if (!card.style.getPropertyValue('--card-color'))card.style.setProperty('--card-color', palette[i%palette.length]);
+        card.setAttribute('role', 'button');
+        card.setAttribute('aria-label', `Seleccionar ${labels[i].name}`);
+        card.onclick = () => {
+            setCurrent(i);
+            restart()
+        };
+        card.onkeydown = e => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                setCurrent(i);
+                restart()
+            }
+        }
+    });
+    function move(n) {
+        setCurrent((current+n+cards.length)%cards.length);
+        restart()
+    }
+    for (const [name, dir, char] of [['prev', -1, '‹'], ['next', 1, '›']]) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `coverflow-btn ${name}`;
+        btn.setAttribute('aria-label', dir === 1 ? 'Variedad siguiente': 'Variedad anterior');
+        btn.textContent = char;
+        btn.onclick = () => move(dir);
+        carousel.appendChild(btn)
+    }
+    function render(at) {
+        const width = cards[0].offsetWidth, step = width*(innerWidth <= 800 ? .55: .71), n = cards.length;
+        cards.forEach((card, i) => {
+            let delta = ((i-at+n/2)%n+n)%n-n/2;
+            const abs = Math.abs(delta), scale = abs <= 1 ? 1-.11*abs: Math.max(.65, .89-.16*(abs-1));
+            card.style.setProperty('--offset', `${delta*step}px`);
+            card.style.setProperty('--angle', `${-Math.sign(delta)*24*Math.min(abs,1)}deg`);
+            card.style.setProperty('--scale', scale);
+            card.style.setProperty('--opacity', abs < 1.9 ? 1: Math.max(0, 1-(abs-1.9)/.55));
+            card.style.setProperty('--z', String(Math.round(1000-abs*100)));
+        });
+    }
+    function finishSelection() {
+        cards.forEach((card, i) => {
+            const active = i === current, dist = Math.min(Math.abs(i-current), cards.length-Math.abs(i-current));
+            card.dataset.active = String(active);
+            card.tabIndex = dist <= 1 ? 0: -1;
+            card.setAttribute('aria-pressed', String(active));
+            dots[i].setAttribute('aria-current', String(active))
+        });
+        description.textContent = labels[current].description;
+        description.classList.remove('changing');
+    }
+    function setCurrent(index, instant = false) {
+        cancelAnimationFrame(animationFrame);
+        current = index;
+        const n = cards.length;
+        const start = position, delta = ((index-start+n/2)%n+n)%n-n/2;
+        const destination = start+delta;
+        dots.forEach((dot, i) => dot.setAttribute('aria-current', String(i === index)));
+        if (instant || Math.abs(delta) < .01 || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            position = destination;
+            render(position);
+            finishSelection();
+            return
+        }
+        description.classList.add('changing');
+        const begin = performance.now();
+        const duration = 1100+Math.max(0, Math.abs(delta)-1)*180;
+        function frame(now) {
+            const p = Math.min(1, (now-begin)/duration);
+            const easing = p < .5 ? 4*p*p*p: 1-Math.pow(-2*p+2, 3)/2;
+            position = start+delta*easing;
+            render(position);
+            if (p < 1) {
+                animationFrame = requestAnimationFrame(frame)
+            }else {
+                position = ((destination%n)+n)%n;
+                render(position);
+                finishSelection()
+            }
+        }
+        animationFrame = requestAnimationFrame(frame);
+    }
+    function restart() {
+        clearInterval(timer);
+        if (inView && !paused && !interacting)timer = setInterval(() => setCurrent((current+1)%cards.length), 4200);
+        toggle.textContent = paused ? 'Reproducir': 'Pausar';
+        toggle.setAttribute('aria-label', paused ? 'Reproducir carrusel': 'Pausar carrusel')
+    }
+    carousel.addEventListener('keydown', e => {
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+            e.preventDefault();
+            move(e.key === 'ArrowLeft' ? -1: 1)
+        }
+    });
+    carousel.addEventListener('pointerenter', () => {
+        interacting = true;
+        restart()
+    });
+    carousel.addEventListener('pointerleave', () => {
+        interacting = false;
+        restart()
+    });
+    carousel.addEventListener('focusin', () => {
+        interacting = true;
+        restart()
+    });
+    carousel.addEventListener('focusout', e => {
+        if (!carousel.contains(e.relatedTarget)) {
+            interacting = false;
+            restart()
+        }
+    });
+    let startX = 0, startY = 0;
+    carousel.addEventListener('touchstart', e => {
+        startX = e.changedTouches[0].clientX;
+        startY = e.changedTouches[0].clientY
+    }, {
+        passive: true
+    });
+    carousel.addEventListener('touchend', e => {
+        const dx = e.changedTouches[0].clientX-startX, dy = e.changedTouches[0].clientY-startY;
+        if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy))move(dx < 0 ? 1: -1)
+    }, {
+        passive: true
+    });
+    addEventListener('resize', () => render(position));
+    if ('IntersectionObserver' in window)new IntersectionObserver(entries => {
+        inView = entries[0].isIntersecting;
+        restart()
+    }, {
+        threshold: .25
+    }).observe(carousel);
+    else inView = true;
+    setCurrent(current, true);
+    restart();
+    const plant = document.querySelector('.intro-visual');
+    if (plant && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        let pending = false;
+        function scrollEffect() {
+            if (pending)return;
+            pending = true;
+            requestAnimationFrame(() => {
+                const r = plant.getBoundingClientRect();
+                if (r.bottom > 0 && r.top < innerHeight) {
+                    const shift = (r.top+r.height/2-innerHeight/2)*.055;
+                    plant.style.setProperty('--plant-shift', `${Math.max(-25,Math.min(25,shift))}px`)
+                }
+                pending = false
+            })
+        }
+        addEventListener('scroll', scrollEffect, {
+            passive: true
+        });
+        scrollEffect()
+    }
+})();
+;
+(() => {
+    const section = document.querySelector('.gastronomia');
+    if (!section)return;
+    const background = document.createElement('div');
+    background.className = 'gas-fixed-layer';
+    background.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(background);
+    section.classList.add('fixed-background');
+    let queued = false;
+    function render() {
+        queued = false;
+        const rect = section.getBoundingClientRect(), height = innerHeight, width = document.documentElement.clientWidth;
+        const top = Math.max(0, rect.top), bottom = Math.max(0, height-rect.bottom), left = Math.max(0, rect.left), right = Math.max(0, width-rect.right);
+        const visible = rect.bottom > 0 && rect.top < height && rect.right > 0 && rect.left < width;
+        background.style.visibility = visible ? 'visible': 'hidden';
+        if (visible)background.style.clipPath = `inset(${top}px ${right}px ${bottom}px ${left}px)`;
+    }
+    function schedule() {
+        if (!queued) {
+            queued = true;
+            requestAnimationFrame(render)
+        }
+    }
+    window.addEventListener('scroll', schedule, {
+        passive: true
+    });
+    window.addEventListener('resize', schedule);
+    render();
+})();
