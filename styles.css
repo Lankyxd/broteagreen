@@ -877,20 +877,23 @@ nav {
     pointer-events: none;
 }
 
-.hero-photo[data-slide="0"] {
-    background-image: url('img/envases.png') !important;
+/* Primera imagen */
+.hero-photo {
+    background-image: url('img/envases.png');
     background-size: contain;
     background-position: center;
 }
 
+/* Segunda imagen */
 .hero-photo[data-slide="1"] {
-    background-image: url('img/hero2.png') !important;
+    background-image: url('img/hero2.png');
     background-size: contain;
     background-position: center;
 }
 
+/* Tercera imagen */
 .hero-photo[data-slide="2"] {
-    background-image: url('img/hero3.png') !important;
+    background-image: url('img/hero3.png');
     background-size: contain;
     background-position: center;
 }
@@ -1516,4 +1519,22 @@ nav {
     to {
         transform: translateX(-50%);
     }
+}
+
+.hero-photo[data-slide="0"] {
+    background-image: url('img/envases.png') !important;
+    background-size: contain;
+    background-position: center;
+}
+
+.hero-photo[data-slide="1"] {
+    background-image: url('img/hero2.png') !important;
+    background-size: contain;
+    background-position: center;
+}
+
+.hero-photo[data-slide="2"] {
+    background-image: url('img/hero3.png') !important;
+    background-size: contain;
+    background-position: center;
 }
