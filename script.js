@@ -133,7 +133,7 @@ packageLink.addEventListener('click', () => {
     hero.appendChild(controls);
     function restart() {
         clearInterval(timer);
-        if (!paused)timer = setInterval(() => show((index+1)%slides.length), 7000);
+        if (!paused)timer = setInterval(() => show((index+1)%slides.length), 4000);
         toggle.textContent = paused ? 'Reproducir': 'Pausar';
         toggle.setAttribute('aria-label', paused ? 'Reproducir carrusel': 'Pausar carrusel');
     }
