@@ -172,7 +172,7 @@ packageLink.addEventListener('click', () => {
     bottom.innerHTML = '<p class="coverflow-description" aria-live="polite"></p><div class="coverflow-indicators" aria-label="Seleccionar variedad"></div>';
     carousel.after(bottom);
     const description = bottom.querySelector('p'), indicators = bottom.querySelector('.coverflow-indicators');
-    let current = 1, position = 1, animationFrame = 0, timer = null, paused = matchMedia('(prefers-reduced-motion: reduce)').matches, inView = false, interacting = false;
+    let current = 1, position = 1, animationFrame = 0, timer = null, paused = false, inView = false, interacting = false;
     const dots = labels.map((label, i) => {
         const button = document.createElement('button');
         button.type = 'button';
@@ -277,7 +277,7 @@ packageLink.addEventListener('click', () => {
     }
     function restart() {
         clearInterval(timer);
-        if (inView && !paused && !interacting)timer = setInterval(() => setCurrent((current+1)%cards.length), 4000);
+        if (inView && !paused && !interacting)timer = setInterval(() => setCurrent((current+1)%cards.length), 3000);
         toggle.textContent = paused ? 'Reproducir': 'Pausar';
         toggle.setAttribute('aria-label', paused ? 'Reproducir carrusel': 'Pausar carrusel')
     }
