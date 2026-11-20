@@ -877,23 +877,20 @@ nav {
     pointer-events: none;
 }
 
-/* Primera imagen */
-.hero-photo {
-    background-image: url('img/envases.png');
+.hero-photo[data-slide="0"] {
+    background-image: url('img/envases.png') !important;
     background-size: contain;
     background-position: center;
 }
 
-/* Segunda imagen */
 .hero-photo[data-slide="1"] {
-    background-image: url('img/hero2.png');
+    background-image: url('img/hero2.png') !important;
     background-size: contain;
     background-position: center;
 }
 
-/* Tercera imagen */
 .hero-photo[data-slide="2"] {
-    background-image: url('img/hero3.png');
+    background-image: url('img/hero3.png') !important;
     background-size: contain;
     background-position: center;
 }
