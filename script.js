@@ -277,7 +277,7 @@ packageLink.addEventListener('click', () => {
     }
     function restart() {
         clearInterval(timer);
-        if (inView && !paused && !interacting)timer = setInterval(() => setCurrent((current+1)%cards.length), 4200);
+        if (inView && !paused && !interacting)timer = setInterval(() => setCurrent((current+1)%cards.length), 4000);
         toggle.textContent = paused ? 'Reproducir': 'Pausar';
         toggle.setAttribute('aria-label', paused ? 'Reproducir carrusel': 'Pausar carrusel')
     }
