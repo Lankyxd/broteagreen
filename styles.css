@@ -1632,3 +1632,23 @@ nav {
     min-height: 100vh;
     overflow: hidden;
 }
+
+nav a {
+    display: inline-block;
+    position: relative;
+    padding: 10px 14px;
+    border-radius: 6px;
+
+    transition:
+        background-color 0.35s ease,
+        color 0.35s ease,
+        transform 0.35s ease,
+        box-shadow 0.35s ease;
+}
+
+nav a:hover {
+    background-color: #d9efac;
+    color: #183425;
+    transform: translateY(-4px) scale(1.12);
+    box-shadow: 0 5px 22px rgba(200, 230, 144, 0.4);
+}

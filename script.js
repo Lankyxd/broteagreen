@@ -275,12 +275,18 @@ packageLink.addEventListener('click', () => {
         }
         animationFrame = requestAnimationFrame(frame);
     }
-    function restart() {
-        clearInterval(timer);
-        if (inView && !paused && !interacting)timer = setInterval(() => setCurrent((current+1)%cards.length), 3000);
-        toggle.textContent = paused ? 'Reproducir': 'Pausar';
-        toggle.setAttribute('aria-label', paused ? 'Reproducir carrusel': 'Pausar carrusel')
-    }
+    let carouselTimer;
+
+    function restartCarousel() {
+    clearTimeout(carouselTimer);
+
+    carouselTimer = setTimeout(() => {
+        setCurrent((current + 1) % cards.length);
+        restartCarousel();
+    }, 5000);
+}
+
+restartCarousel();
     carousel.addEventListener('keydown', e => {
         if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
             e.preventDefault();
