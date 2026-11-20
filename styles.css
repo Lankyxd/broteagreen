@@ -1612,3 +1612,23 @@ nav {
     mask-image: none;
     transform: none;
 }
+
+.hero-photo,
+.hero-photo[data-slide="0"],
+.hero-photo[data-slide="1"],
+.hero-photo[data-slide="2"] {
+    position: absolute;
+    inset: 0;
+    width: 100% !important;
+    height: 100% !important;
+    background-size: cover !important;
+    background-position: center !important;
+    aspect-ratio: auto !important;
+    transform: none;
+    mask-image: none;
+}
+.hero {
+    height: 100vh;
+    min-height: 100vh;
+    overflow: hidden;
+}

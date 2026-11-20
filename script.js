@@ -259,7 +259,7 @@ packageLink.addEventListener('click', () => {
         }
         description.classList.add('changing');
         const begin = performance.now();
-        const duration = 1100+Math.max(0, Math.abs(delta)-1)*180;
+        const duration = 1100;
         function frame(now) {
             const p = Math.min(1, (now-begin)/duration);
             const easing = p < .5 ? 4*p*p*p: 1-Math.pow(-2*p+2, 3)/2;
