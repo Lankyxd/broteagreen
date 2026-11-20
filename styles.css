@@ -877,35 +877,25 @@ nav {
     pointer-events: none;
 }
 
+/* Primera imagen */
 .hero-photo {
     background-image: url('img/envases.png');
-    background-repeat: no-repeat;
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 69%;
-    aspect-ratio: 865 / 565;
-    background-size: 193% auto;
-    background-position: 83% 56%;
-    mask-image: linear-gradient(90deg,transparent,#000 17%,#000 94%,transparent);
-    animation: hero-in .7s ease both;
+    background-size: contain;
+    background-position: center;
 }
 
+/* Segunda imagen */
 .hero-photo[data-slide="1"] {
-    width: 72%;
-    aspect-ratio: 1672 / 575;
-    background-size: 100% auto;
-    background-position: center 58%;
-    mask-image: linear-gradient(90deg,transparent,#000 16%,#000 96%,transparent);
+    background-image: url('img/hero2.png');
+    background-size: contain;
+    background-position: center;
 }
 
+/* Tercera imagen */
 .hero-photo[data-slide="2"] {
-    width: 64%;
-    aspect-ratio: 540 / 465;
-    background-size: 310% auto;
-    background-position: 12.4% 66%;
-    mask-image: linear-gradient(90deg,transparent,#000 19%,#000 94%,transparent);
+    background-image: url('img/hero3.png');
+    background-size: contain;
+    background-position: center;
 }
 
 @keyframes hero-in {
