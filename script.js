@@ -100,7 +100,7 @@ packageLink.addEventListener('click', () => {
     const controls = document.createElement('div');
     controls.className = 'hero-dots';
     controls.setAttribute('aria-label', 'Diapositivas de portada');
-    let index = 0, timer = null, paused = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let index = 0, timer = null, paused = false;;
     function show(i) {
         index = i;
         const s = slides[i];
